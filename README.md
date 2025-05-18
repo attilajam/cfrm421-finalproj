@@ -4,7 +4,6 @@ The project idea is based of this [kaggle](https://www.kaggle.com/c/optiver-trad
 Download the `train.csv` from the kaggle link above. Make an algorithm file in the `algorithms` folder. 
 
 Activate the virtual environment:
-````
 ```
 git clone https://github.com/attilajam/cfrm421-finalproj.git
 cd cfrm421-finalproj
