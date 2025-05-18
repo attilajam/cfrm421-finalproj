@@ -1,0 +1,11 @@
+# .gitignore
+
+# Virtual Environment stuff
+.venv/
+venv/
+env/
+.conda/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
