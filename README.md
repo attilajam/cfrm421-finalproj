@@ -13,3 +13,4 @@ pip install -r requirements.txt
 ```
 - Attila: using CatBoost
 - Cooper: using XgBoost
+- Brandon: using Random Forest
