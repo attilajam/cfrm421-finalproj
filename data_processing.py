@@ -1,11 +1,9 @@
-from sklearn.model_selection import train_test_split
 import pandas as pd
 import numpy as np
 
-# import dataset
 def load_data(path="./data/train.csv"):
     """
-    Load CSV data
+    Load CSV data from the given path, default is our train.csv file
     """
     return pd.read_csv(path)
 
