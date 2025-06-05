@@ -21,6 +21,9 @@ def main():
     X_train, y_train = dp.get_features_and_target(train_df)
     X_test, y_test = dp.get_features_and_target(test_df)
 
+   # train lr
+    train_lin_reg(X_train, y_train, X_test, y_test)
+
     # train rf
     train_random_forest(X_train, y_train, X_test, y_test)
 
