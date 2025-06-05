@@ -19,8 +19,13 @@ def preprocess_features(df):
     # make copy of df to avoid modifying original
     df = df.copy()
 
-    # drop near and far price due to missing values (is this correct? p sure these ones were problem right)
-    df = df.drop(columns=["near_price", "far_price"])
+    feature_cols = [
+        "ask_price", "bid_price", "wap", "matched_size",
+        "imbalance_size", "bid_size", "ask_size", "reference_price", 
+        "seconds_in_bucket"
+    ]
+    # drop missing values
+    df = df.dropna(subset=feature_cols)
 
     # new features and explanations
     # Bid-ask spread: measures market liquidity (the price gap buyers and sellers are willing to accept)
@@ -56,7 +61,7 @@ def preprocess_features(df):
 
     return df
 
-def time_split(df, test_dates=3, use_all=False):
+def time_split(df, test_dates=3, sample_frac=None):
     """
     Split data by date_id as for stock prices, we need to
     ensure that time is respected in training
@@ -64,23 +69,20 @@ def time_split(df, test_dates=3, use_all=False):
     test_dates are the number of most recent dates to reserve for testing, aka
     use up to the last N dates as test set
 
-    If use_all is True it returns the entire dataset as training
-    for our final model with highest performance
-    (idk if we need a test set if we use all data, this is final step anyways?) 
+    Sample frac determines how much of the dataset we use, as the dataset is
+    massive
 
     Returns a training set as a df and test set as a df
     """
-    if use_all:
-        return df.copy(), None
-
-    # sort dates to respect time
     unique_dates = sorted(df["date_id"].unique())
-    # separate training and test dates
     train_dates = unique_dates[:-test_dates]
     test_dates = unique_dates[-test_dates:]
-    # separate into training and test dataframes from the dates we just split
     train_df = df[df["date_id"].isin(train_dates)]
     test_df = df[df["date_id"].isin(test_dates)]
+
+    if sample_frac is not None:
+        train_df = train_df.sample(frac=sample_frac, random_state=42)
+        test_df = test_df.sample(frac=sample_frac, random_state=42)
 
     return train_df, test_df
 
@@ -99,7 +101,7 @@ def get_features_and_target(df, drop_id_cols=["stock_id", "date_id"]):
     drop_cols = ["target"]
     # for each column in drop_id_cols, add it to the drop_cols list
     for col in drop_id_cols:
-        drop_cols += col
+        drop_cols.append(col)
     # drop all specified columns from dataframe
     X = df.drop(columns=drop_cols)
 
